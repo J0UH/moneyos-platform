@@ -23,7 +23,7 @@ Financial products often expose isolated features while the operational truth re
 ## System shape
 
 ```mermaid
-flowchart LR
+flowchart TD
     n0["Money primitives"]
     n1["Policy engine"]
     n2["Workflow runtime"]

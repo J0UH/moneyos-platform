@@ -4,7 +4,7 @@
 
 MoneyOS is my work on bringing bank payments, programmable assets, and settlement into one system people can actually operate.
 
-<img src="assets/hero-v2.webp" alt="MoneyOS illustrated as a crafted architectural model, with exposed sketch and structural framing" width="100%" />
+<img src="assets/hero-v3.webp" alt="Four graphite financial modules joined by a single amber rail" width="100%" />
 
 Money moves through systems that describe it differently. A bank has an account entry. A contract has an on-chain balance. An application has a payment status, and an operator needs to explain how they all relate. Connecting the APIs is only the start.
 

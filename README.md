@@ -1,20 +1,24 @@
-[← All systems](https://github.com/J0UH) · [Money and operations systems](https://github.com/J0UH/money-operations-systems)
-
-<p align="center">
-  <img src="assets/hero.webp" alt="Four coherent plates for records, rules, evidence, and automation share one structural edge" width="100%" />
-</p>
+[← All work](https://github.com/J0UH) · [Money and operations systems](https://github.com/J0UH/money-operations-systems)
 
 # MoneyOS
 
-MoneyOS brings accounts, open-banking payments, programmable assets, blockchain settlement, evidence, and AI-operated workflows into one coherent model. It is a way to connect banking and digital money without losing the controls people need in the real world.
+MoneyOS is my work on bringing bank payments, programmable assets, and settlement into one system people can actually operate.
 
-## The engineering problem
+<img src="assets/hero-v2.webp" alt="MoneyOS illustrated as a crafted architectural model, with exposed sketch and structural framing" width="100%" />
 
-Banking, payments, stable-value assets, on-chain settlement, and operations are often delivered as separate products with fragmented truth. The work focuses on reusable money primitives, explicit authority, shared evidence, and a system that both people and agents can operate safely.
+Money moves through systems that describe it differently. A bank has an account entry. A contract has an on-chain balance. An application has a payment status, and an operator needs to explain how they all relate. Connecting the APIs is only the start.
 
+What draws me to MoneyOS is the chance to work on that whole problem. The aim is a shared foundation for accounts, payments, assets, and the workflows around them, including work carried out by AI.
 
+## Keeping the money and the work in step
 
-## What the system covers
+A workflow can finish a task while the financial result is still pending. I keep those ideas separate. The operating process needs to know what to do next; the financial record needs to establish what actually happened.
+
+That distinction shapes the account model, policy checks, and reconciliation path. It also gives an agent a smaller, clearer set of actions to work with. When a result does not match the ledger, the system needs a way to recover before reporting success.
+
+MoneyOS brings together several strands of the portfolio. The payment, issuance, and settlement pages below go deeper into the individual problems.
+
+## What the work covers
 
 - Account and balance primitives
 - Open-banking and account-to-account payments
@@ -25,7 +29,8 @@ Banking, payments, stable-value assets, on-chain settlement, and operations are 
 - Evidence, reconciliation, and audit state
 - APIs and tools for human and AI operators
 
-## System shape
+<details>
+<summary>A closer look at the technical flow</summary>
 
 ```mermaid
 flowchart TD
@@ -43,14 +48,15 @@ accDescr: Money truth is recorded separately from workflow state. Automated and 
     reconcile -->|Yes| api["Integration API"]
 ```
 
-## Build notes
+</details>
 
-- Treat money state and workflow state as related but different concerns.
-- Make every automated action explainable from durable inputs.
-- Build for operational recovery, not only successful execution.
+## Related work
 
-<sub>Public overview only. Source code, customer data, credentials, and private operating details are not included.</sub>
+- [Open finance and payments](https://github.com/J0UH/open-finance-payments)
+- [Stablecoin and programmable asset infrastructure](https://github.com/J0UH/stablecoin-infrastructure)
+- [Always-on blockchain settlement](https://github.com/J0UH/token-bridge-sdk)
+- [Money and operations systems](https://github.com/J0UH/money-operations-systems)
 
-## Talk through a similar problem
+Working on a similar problem? [Tell me what you are building](mailto:ju@jomena.group?subject=MoneyOS).
 
-Working on something similar? [Tell me about it](mailto:ju@jomena.group?subject=MoneyOS).
+*This is a public account of the work. Source code and private operating details are not included in this repository.*

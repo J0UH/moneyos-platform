@@ -1,62 +1,64 @@
-[← All work](https://github.com/J0UH) · [Money and operations systems](https://github.com/J0UH/money-operations-systems)
+[← Profile](https://github.com/J0UH) · [Money and operations](https://github.com/J0UH/money-operations-systems)
 
 # MoneyOS
 
-MoneyOS is my work on bringing bank payments, programmable assets, and settlement into one system people can actually operate.
+Cross-border settlement, brought together — bank payments, programmable assets, and the workflows that keep them in step.
 
-<img src="assets/hero-v3.webp" alt="Four graphite financial modules joined by a single amber rail" width="100%" />
+*In production at [ARYZE](https://aryze.io). This page describes the system — not a product website. Implementation stays with the company that owns it — [about these pages](https://github.com/J0UH/J0UH/blob/main/ABOUT.md).*
 
-Money moves through systems that describe it differently. A bank has an account entry. A contract has an on-chain balance. An application has a payment status, and an operator needs to explain how they all relate. Connecting the APIs is only the start.
+## Problem
 
-What draws me to MoneyOS is the chance to work on that whole problem. The aim is a shared foundation for accounts, payments, assets, and the workflows around them, including work carried out by AI.
+A cross-border payment is not an FX quote. It spans funding, identity and permissions, screening, conversion, token movement, custody, payout, and bank confirmation. Customers need one coordinated, traceable record of the payment — not a pile of disconnected provider statuses.
 
-## Keeping the money and the work in step
+## What I built
 
-A workflow can finish a task while the financial result is still pending. I keep those ideas separate. The operating process needs to know what to do next; the financial record needs to establish what actually happened.
+MoneyOS is the coordinating service: customer requests become durable workflows that drive Aryze Core modules and external providers (banks, venues, wallet and identity systems, ledgers). It covers FX conversion, on/off-ramp flows, custody, settlement, account provisioning, and movement status through to bank credit.
 
-That distinction shapes the account model, policy checks, and reconciliation path. It also gives an agent a smaller, clearer set of actions to work with. When a result does not match the ledger, the system needs a way to recover before reporting success.
+## Key decisions
 
-MoneyOS brings together several strands of the portfolio. The payment, issuance, and settlement pages below go deeper into the individual problems.
+- **Separate the movement record from provider chatter.** One transaction reference survives quote, approval, conversion, recording, and completion. Sequence numbers discard stale updates.
+- **Durable workflows, thin provider tasks.** Long-running payment work is saved and resumed; Core modules execute bounded provider steps with retries and clear receipts.
+- **Adapters at the edge.** Banks, venues, wallets, and networks plug in through adapters — they are not embedded in the coordinating service.
+- **Policy without holding the keys.** MoneyOS enforces policy and tracks exact transaction hashes and metadata. Signing material stays in separate security boundaries (bank / institution / wallet-provider MPC); the provider assembles and broadcasts.
 
-## What the work covers
-
-- Account and balance primitives
-- Open-banking and account-to-account payments
-- Programmable asset issuance and operation
-- Same-chain and cross-chain settlement
-- AI-operated financial workflows
-- Policy and authority boundaries
-- Evidence, reconciliation, and audit state
-- APIs and tools for human and AI operators
-
-<details>
-<summary>A closer look at the technical flow</summary>
+## Architecture
 
 ```mermaid
-flowchart TD
+flowchart LR
 accTitle: MoneyOS
-accDescr: Money truth is recorded separately from workflow state. Automated and human authority converge on bounded tools, and no result leaves through the API until it reconciles with ledger evidence.
-    event["Money event"] --> policy["Policy engine"]
-    policy --> ledger["Ledger evidence"]
-    policy --> workflow["Workflow runtime"]
-    workflow --> authority{"Authority required?"}
-    authority -->|Automatic| tools["Bounded tools"]
-    authority -->|Human| decision["Human decision"]
-    decision --> tools
-    tools --> reconcile{"Matches ledger?"}
-    reconcile -->|No| workflow
-    reconcile -->|Yes| api["Integration API"]
+accDescr: Customer requests enter the MoneyOS API, become durable workflows that drive Core modules and provider adapters, then publish a sequenced movement record back to the customer view.
+  customer["Customer systems"] --> api["MoneyOS API"]
+  api --> wf["Durable workflows"]
+  wf --> core["Aryze Core modules"]
+  core --> adapters["Provider adapters"]
+  adapters --> receipts["Receipts"]
+  receipts --> journal["Journal / outbox"]
+  journal --> view["Movement view"]
 ```
 
-</details>
+Core paths in the system:
+
+- **Settlement** — burn / mint and chain settlement flows
+- **Wallets** — provisioning and wallet operations
+- **Trading** — on/off-ramp and venue flows
+- **Custody** — withdrawals and banking callbacks
+- **Accounts** — smart-account / identity provisioning
+
+Payment shape end to end: funding confirmed → checks passed → source token burned → destination token minted → payout started → bank credit confirmed.
+
+## Stack (indicative)
+
+- **Coordination:** HTTP/OpenAPI edge, durable workflow runtime, journal/outbox messaging
+- **Data:** relational stores per Core module; sequenced movement updates to the customer view
+- **Domain modules:** settlement, wallets, trading, custody, smart accounts
+- **External:** banks, venues, wallet/MPC providers, identity/screening, EVM contracts
+
+Concrete vendors and deployment topology stay with the private implementations.
 
 ## Related work
 
 - [Open finance and payments](https://github.com/J0UH/open-finance-payments)
 - [Stablecoin and programmable asset infrastructure](https://github.com/J0UH/stablecoin-infrastructure)
-- [Always-on blockchain settlement](https://github.com/J0UH/token-bridge-sdk)
 - [Money and operations systems](https://github.com/J0UH/money-operations-systems)
 
 Working on a similar problem? [Tell me what you are building](mailto:ju@jomena.group?subject=MoneyOS).
-
-*This is a public account of the work. Source code and private operating details are not included in this repository.*
